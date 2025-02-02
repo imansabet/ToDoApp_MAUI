@@ -1,25 +1,39 @@
-﻿namespace ToDoApp
+﻿using ToDoApp.ViewModels;
+
+namespace ToDoApp
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
+        private ToDoViewModel _viewModel;
         public MainPage()
         {
             InitializeComponent();
+            _viewModel = new ToDoViewModel();
+            BindingContext = _viewModel;
         }
-
-        private void OnCounterClicked(object sender, EventArgs e)
+        private void OnAddClicked(object sender,EventArgs e) 
         {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            var newTaskTitle = NewTaskEntry.Text;
+            if (!string.IsNullOrEmpty(newTaskTitle)) 
+            {
+                _viewModel.AddTodoItem(newTaskTitle);   
+                NewTaskEntry.Text = string.Empty;
+            }
         }
+        private void OnRemoveClicked(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            if (button?.CommandParameter is TodoItem todoItem)
+            {
+                _viewModel.RemoveTodoItem(todoItem);
+            }
+        }
+
+    }
+    public class TodoItem 
+    {
+        public string Title { get; set; }
+        public bool IsDone { get; set; }
     }
 
 }
