@@ -31,4 +31,5 @@ public  class ToDoViewModel : BindableObject
     {
         TodoItems.Remove(todoItem);
     }
+    public Command<TodoItem> RemoveCommand => new Command<TodoItem>(RemoveTodoItem);
 }
